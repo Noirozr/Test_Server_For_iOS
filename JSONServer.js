@@ -1,11 +1,12 @@
 var http = require("http");
+var url = require("url");
 
-function start() {
+function start(route, handle) {
 	function OnRequest(request, response) {
-		console.log("Request received");
-		response.writeHead(200, {"Content-Type": "text/plain"});
-		response.write("This is A json server to test POST and GET methods.");
-		response.end();
+		var pathName = url.parse(request.url).pathname;
+		console.log("Request for "+ pathName + " received.");
+		
+		route(handle, pathName, request, response);		
 	}
 	
 	http.createServer(OnRequest).listen(8080);
